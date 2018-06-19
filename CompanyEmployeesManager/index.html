@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="UI/css/main.css" type="text/css" />
+    <script type="text/javascript" src="UI/js/jquery_v3.3.1.js"></script>
+    <script type="text/javascript" src="UI/js/knockout_v3.4.2.js"></script>
+    <script type="text/javascript" src="UI/js/moment.js"></script>
+    <script type="text/javascript" src="UI/js/employees_service_manager.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <header>
+        <div class="company-logo pointer"></div>
+        <div class="header-content">
+            <div>
+                <div class="header-phone-support">
+                    <div class="header-phone-logo"></div>
+                    <div class="header-phone-number">1800 505 529</div>
+                </div>
+                <div class="header-menu">
+                    <div class="header-menu-item pointer">Contact</div>
+                    <div class="header-menu-item pointer">What`s new?</div>
+                    <div class="header-menu-item pointer">Find a Cunsultant</div>
+                    <div class="header-menu-item pointer">Pricing</div>
+                    <button class="header-menu-login-button pointer">Login</button>
+                    <button class="header-menu-free-trial-button pointer">Free Trial</button>
+                </div>
+            </div>
+            <div class="backed-logo"></div>
+        </div>
+    </header>
+    <div class="content">
+        <div class="menu">
+            <div class="menu-item pointer">
+                <img class="menu-item-logo" src="UI/images/home-logo.png" />
+                <span class="menu-item-text">Dashboard</span>
+            </div>
+            <div id="employees-menu-button" class="menu-item pointer">
+                <img class="menu-item-logo" src="UI/images/employees-logo.png" />
+                <span class="menu-item-text">Employees</span>
+            </div>
+        </div>
+        <div class="navigation-search-block">
+            <div class="navigation"><div class="navigation-parent">Home</div>&nbsp;&nbsp;>&nbsp;&nbsp; Employees</div>
+            <div class="search-block">
+                <input type="text" data-bind="textInput: searchString" class="search-input" />
+                <div class="search-logo pointer" title="Search" data-bind="click:onSearchButtonClick"></div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="employees-container">
+                <div class="employees-header">Employees</div>
+                <div class="employees-container-buttons">
+                    <div class="employees-container-buttons-item">
+                        <div class="employees-container-button pointer" data-bind="click:onCreateEmployeeButtonClick">+</div>
+                        <p class="employees-container-button-text">Add</p>
+                    </div>
+                </div>
+                <div id="employees" data-bind="css:employeesItemsStyle">
+                    <!-- ko foreach: employeesArray -->
+                    <div class="employee">
+                        <div class="employee-logo"></div>
+                        <div class="employee-info">
+                            <div class="remove-employee-button pointer" title="Remove" data-bind="click:$parent.onRemoveEmployeeButtonClick.bind($data)">&times;</div>
+                            <div class="edit-employee-button pointer" title="Edit" data-bind="click:$parent.onEditEmployeeButtonClick.bind($data)"></div>
+                            <p class="employee-name" data-bind="text:Name"></p>
+                            <p>Age: <span data-bind="text:Age"></span></p>
+                            <p>Position: <span data-bind="text:Position"></span></p>
+                            <p>Start date: <span data-bind="text:StartDate"></span></p>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <div class="loader display-none"></div>
+                    <p id="not-found-info" class="display-none">Not found!</p>
+                </div>
+                <div class="paginator">
+                    <button id="prev" class="paginator-button pointer" data-bind="click:onPreviousPageButtonClick">Previous</button>
+                    <div class="paginator-total pointer"><span data-bind="text:currentPage"></span>&nbsp;|&nbsp;<span data-bind="text:totalPages"></span></div>
+                    <button id="next" class="paginator-button pointer" data-bind="click:onNextPageButtonClick">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="edit-employee-window modal">
+        <div class="modal-content">
+            <span class="close pointer" title="Close">&times;</span>
+            <div class="modal-header">Edit employee</div>
+            <form class="modal-form" data-bind="submit:editEmployee, with:editModel">
+                <input name="Id" data-bind="textInput:Id" hidden />
+                <div class="modal-form-field">
+                    <label class="modal-form-label">Name:</label>
+                    <input type="text" class="modal-form-input" name="Name" data-bind="textInput:Name" />
+                </div>
+                <div class="modal-form-field">
+                    <label class="modal-form-label">Age:</label>
+                    <input type="text" class="modal-form-input" name="Age" data-bind="textInput:Age" />
+                </div>
+                <div class="modal-form-field">
+                    <label class="modal-form-label">Position:</label>
+                    <input type="text" class="modal-form-input" name="Position" data-bind="textInput:Position" />
+                </div>
+                <div class="modal-form-field">
+                    <label class="modal-form-label">Start date:</label>
+                    <input type="date" class="modal-form-input" name="StartDate" data-bind="value:StartDate" />
+                </div>
+                <div class="modal-buttons">
+                    <input type="button" class="cancel-button btn btn-default" value="Cancel" />
+                    <input type="submit" class="sumbit btn btn-primary" value="Save">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="create-employee-window modal">
+        <div class="modal-content">
+            <span class="close pointer" title="Close">&times;</span>
+            <div class="modal-header">Create employee</div>
+            <form class="modal-form" data-bind="submit:addEmployee, with:createModel">
+                <div class="modal-form-field">
+                    <label class="modal-form-label">Name:</label>
+                    <input type="text" class="modal-form-input" name="Name" data-bind="textInput:Name" />
+                </div>
+                <div class="modal-form-field">
+                    <label class="modal-form-label">Age:</label>
+                    <input type="text" class="modal-form-input" name="Age" data-bind="textInput:Age" />
+                </div>
+                <div class="modal-form-field">
+                    <label class="modal-form-label">Position:</label>
+                    <input type="text" class="modal-form-input" name="Position" data-bind="textInput:Position" />
+                </div>
+                <div class="modal-form-field">
+                    <label class="modal-form-label">Start date:</label>
+                    <input type="date" class="modal-form-input" name="StartDate" data-bind="value:StartDate" />
+                </div>
+                <div class="modal-buttons">
+                    <input type="button" class="cancel-button btn btn-default" value="Cancel" />
+                    <input type="submit" class="sumbit btn btn-primary" value="Send">
+                </div>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p> @ Developed by Tkhozhevskyi Vitaliy</p>
+    </footer>
+</body>
+</html>
