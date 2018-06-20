@@ -35,7 +35,6 @@ function EmployeesViewModel(url, itemsPerPage, selectors) {
         if (lenght === 0) {
             return "not-found";
         }
-        $("#employees").show();
         return  "employees-items";
     });
     self.init = function () {
@@ -197,7 +196,7 @@ function EmployeesViewModel(url, itemsPerPage, selectors) {
     }
     self.getEmployees = function (isSearchRequest, page) {
         $(".loader").show();
-        if (self.employeesArray.lenght == 0) {
+        if (self.employeesArray().length == 0) {
             $("#not-found-info").hide();
         } else {
             self.employeesArray.removeAll();
