@@ -197,7 +197,11 @@ function EmployeesViewModel(url, itemsPerPage, selectors) {
     }
     self.getEmployees = function (isSearchRequest, page) {
         $(".loader").show();
-        self.employeesArray.removeAll();
+        if (self.employeesArray.lenght == 0) {
+            $("#not-found-info").hide();
+        } else {
+            self.employeesArray.removeAll();
+        }
         var url = self.serviceUrl;
         if (isSearchRequest) {
             if (self.searchString()=="") {
